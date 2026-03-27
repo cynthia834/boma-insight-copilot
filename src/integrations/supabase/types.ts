@@ -14,7 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      user_stocks: {
+        Row: {
+          id: string
+          user_id: string
+          ticker_symbol: string
+          number_of_shares: number
+          average_buy_price: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          ticker_symbol: string
+          number_of_shares?: number
+          average_buy_price?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          ticker_symbol?: string
+          number_of_shares?: number
+          average_buy_price?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_stocks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
