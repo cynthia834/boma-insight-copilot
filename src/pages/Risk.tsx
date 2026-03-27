@@ -25,7 +25,7 @@ export default function Risk() {
   const riskAssets = assets
     .map((a) => ({
       ...a,
-      plPct: ((a.current_price - a.avg_price) / a.avg_price) * 100,
+      plPct: a.avg_price > 0 ? ((a.current_price - a.avg_price) / a.avg_price) * 100 : 0,
     }))
     .sort((a, b) => a.plPct - b.plPct);
 

@@ -11,12 +11,12 @@ export function analyzePortfolio(assets: Asset[]): AnalysisResult {
 
   const sectorConcentration: Record<string, number> = {};
   Object.entries(sectorMap).forEach(([sector, val]) => {
-    sectorConcentration[sector] = Math.round((val / totalValue) * 100);
+    sectorConcentration[sector] = totalValue > 0 ? Math.round((val / totalValue) * 100) : 0;
   });
 
   const bankingPct = sectorConcentration["Banking"] || 0;
   const losers = assets.filter(
-    (a) => ((a.current_price - a.avg_price) / a.avg_price) * 100 < -2
+    (a) => a.avg_price > 0 && ((a.current_price - a.avg_price) / a.avg_price) * 100 < -2
   );
 
   let riskLevel = "Low";

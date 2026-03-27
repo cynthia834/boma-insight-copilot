@@ -4,6 +4,7 @@ import { GlassCard } from "@/components/GlassCard";
 import { PortfolioChart } from "@/components/dashboard/PortfolioChart";
 import { RiskAlerts } from "@/components/dashboard/RiskAlerts";
 import { TrendingUp, TrendingDown, DollarSign, BarChart3, Activity } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const { totalValue, totalCost, pnl, returnPct, assets, simulatePriceUpdate } = usePortfolioStore();
@@ -91,22 +92,38 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {assets.map((a) => {
-                const val = a.shares * a.current_price;
-                const plPct = ((a.current_price - a.avg_price) / a.avg_price) * 100;
-                return (
-                  <tr key={a.symbol} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                    <td className="py-2.5 font-semibold text-foreground">{a.symbol}</td>
-                    <td className="py-2.5 text-right font-mono text-muted-foreground">{a.shares.toLocaleString()}</td>
-                    <td className="py-2.5 text-right font-mono text-muted-foreground">{a.avg_price.toFixed(2)}</td>
-                    <td className="py-2.5 text-right font-mono text-foreground">{a.current_price.toFixed(2)}</td>
-                    <td className="py-2.5 text-right font-mono text-foreground">{val.toLocaleString("en-KE")}</td>
-                    <td className={`py-2.5 text-right font-mono font-semibold ${plPct >= 0 ? "text-success" : "text-destructive"}`}>
-                      {plPct >= 0 ? "+" : ""}{plPct.toFixed(2)}%
-                    </td>
-                  </tr>
-                );
-              })}
+              {assets.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-sm text-muted-foreground">
+                    <p className="mb-2">No holdings loaded yet. This usually means your portfolio has not synced from the database, or Supabase env keys are missing.</p>
+                    <p>
+                      Add or edit positions on the{" "}
+                      <Link to="/portfolio" className="text-primary underline hover:text-primary/90">
+                        Portfolio
+                      </Link>{" "}
+                      page, and confirm <code className="text-xs">VITE_SUPABASE_URL</code> and{" "}
+                      <code className="text-xs">VITE_SUPABASE_PUBLISHABLE_KEY</code> are set in <code className="text-xs">.env</code>.
+                    </p>
+                  </td>
+                </tr>
+              ) : (
+                assets.map((a) => {
+                  const val = a.shares * a.current_price;
+                  const plPct = a.avg_price > 0 ? ((a.current_price - a.avg_price) / a.avg_price) * 100 : 0;
+                  return (
+                    <tr key={a.symbol} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                      <td className="py-2.5 font-semibold text-foreground">{a.symbol}</td>
+                      <td className="py-2.5 text-right font-mono text-muted-foreground">{a.shares.toLocaleString()}</td>
+                      <td className="py-2.5 text-right font-mono text-muted-foreground">{a.avg_price.toFixed(2)}</td>
+                      <td className="py-2.5 text-right font-mono text-foreground">{a.current_price.toFixed(2)}</td>
+                      <td className="py-2.5 text-right font-mono text-foreground">{val.toLocaleString("en-KE")}</td>
+                      <td className={`py-2.5 text-right font-mono font-semibold ${plPct >= 0 ? "text-success" : "text-destructive"}`}>
+                        {plPct >= 0 ? "+" : ""}{plPct.toFixed(2)}%
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>

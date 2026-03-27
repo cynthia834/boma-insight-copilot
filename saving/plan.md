@@ -3,7 +3,7 @@
 # Plan: Add Authentication with User Stocks Seeding
 
 ## Overview
-Implement email/password authentication with Lovable Cloud, create a `user_stocks` table, and protect all routes behind auth. On signup, seed default NSE portfolio entries (SCOM, EQTY, KCB).
+Implement email/password authentication with  Cloud, create a `user_stocks` table, and protect all routes behind auth. On signup, seed default NSE portfolio entries (SCOM, EQTY, KCB).
 
 ## Database Changes
 

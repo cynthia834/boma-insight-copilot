@@ -7,7 +7,7 @@ export function RiskAlerts() {
 
   const alerts = assets
     .map((a) => {
-      const lossPct = ((a.current_price - a.avg_price) / a.avg_price) * 100;
+      const lossPct = a.avg_price > 0 ? ((a.current_price - a.avg_price) / a.avg_price) * 100 : 0;
       return { symbol: a.symbol, lossPct, sector: a.sector };
     })
     .filter((a) => a.lossPct < -2);
